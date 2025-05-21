@@ -50,10 +50,10 @@ public class mainBank
                         continue;
                     case 4:
                         System.out.println("Thank you for using Banknet. Goodbye!");
-                        break;
+                        System.exit(choice);
                     default:
                         System.out.println("Invalid choice. Exiting...");
-                        break;
+                        System.exit(choice);
                 }
                 input.close();
             }
