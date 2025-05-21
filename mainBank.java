@@ -34,10 +34,9 @@ public class mainBank
                 System.out.println("2. Deposit Money");
                 System.out.println("3. Withdraw Money");
                 System.out.println("4. Loan Money");
-                System.out.println("5. Pay Loan Money");
-                System.out.println("6. Show Transactions");
-                System.out.println("7. Change Pin");
-                System.out.println("8. Exit");
+                System.out.println("5. Show Transactions");
+                System.out.println("6. Change Pin");
+                System.out.println("7. Exit");
                 System.out.print("Please select an option: ");
                 choice = input.nextInt();
 
@@ -56,14 +55,12 @@ public class mainBank
                         loanMoney(balance);
                         continue;
                     case 5:
-                        payLoanMoney(balance);
-                    case 6:
                         showTransactions(balance);
                         continue;
-                    case 7:
+                    case 6:
                         changePin(username,password);
                         continue;
-                    case 8 : 
+                    case 7 : 
                         System.out.println("Thank you for using Banknet. Goodbye!");
                         System.exit(choice);
                     default:
@@ -152,6 +149,7 @@ public class mainBank
         Scanner loanMoneyInput = new Scanner(System.in);
         Double loanAmount, months;
         Double monthlyInterest = 0.05;
+        int choice;
 
         System.out.println(" ");
         System.out.print("Enter Amount to Loan : ");
@@ -184,26 +182,39 @@ public class mainBank
             System.out.println(" ");
             System.out.println("Your new balance is PHP " + balance);
         }
-        return balance;
-    }
-    private static Double payLoanMoney (Double balance)
-    {
-        Scanner payInput = new Scanner(System.in);
 
-        double remainingLoan = totalRepayment;
+        while (true)
+        {
+            double remainingLoan = totalRepayment;
 
-        System.out.print("Enter amount to pay for the loan: PHP ");
-        double payAmount = payInput.nextDouble();
+            System.out.print(" Press 0 to continue and 1 to pay your loan : ");
+            choice = loanMoneyInput.nextInt();
 
-        if (payAmount > 0 && payAmount <= balance) {
-            remainingLoan -= payAmount;
-            balance -= payAmount;
-            System.out.println("Payment successful! Remaining loan: PHP " + remainingLoan);
-            System.out.println("Your new balance is PHP " + balance);
-        } else {
-            System.out.println("Invalid payment amount.");
+            switch (choice) 
+            {
+                case 0:
+                    System.out.print("Enter amount to pay for the loan: PHP ");
+                    double payAmount = loanMoneyInput.nextDouble();
+
+                    if (payAmount > 0 && payAmount <= balance) 
+                    {
+                        remainingLoan -= payAmount;
+                        balance -= payAmount;
+                        System.out.println("Payment successful! Remaining loan: PHP " + remainingLoan);
+                        System.out.println("Your new balance is PHP " + balance);
+                    } 
+                    
+                    else 
+                    {
+                        System.out.println("Invalid payment amount.");
+                    }
+                case 1:
+                    return balance;
+                default:
+                    break;
+            }
+            return balance;
         }
-        return balance;
     }
 
     private static double showTransactions (Double balance)
