@@ -33,7 +33,11 @@ public class mainBank
                 System.out.println("1. Check Balance");
                 System.out.println("2. Deposit Money");
                 System.out.println("3. Withdraw Money");
-                System.out.println("4. Exit");
+                System.out.println("4. Loan Money");
+                System.out.println("5. Pay Loan Money");
+                System.out.println("6. Show Transactions");
+                System.out.println("7. Change Pin");
+                System.out.println("8. Exit");
                 System.out.print("Please select an option: ");
                 choice = input.nextInt();
 
@@ -49,6 +53,17 @@ public class mainBank
                         withdraw(balance);
                         continue;
                     case 4:
+                        loanMoney(balance);
+                        continue;
+                    case 5:
+                        payLoanMoney(balance);
+                    case 6:
+                        showTransactions(balance);
+                        continue;
+                    case 7:
+                        changePin(username,password);
+                        continue;
+                    case 8 : 
                         System.out.println("Thank you for using Banknet. Goodbye!");
                         System.exit(choice);
                     default:
@@ -118,5 +133,86 @@ public class mainBank
             }
             return balance;
         }
+    }
+
+    public class loanResult
+    {
+        public double balance;
+        public double totalRepayment;
+
+        public loanResult(double balance, double totalRepayment)
+        {
+            this.balance=balance;
+            this.totalRepayment=totalRepayment;
+        }
+    }
+
+    private static Double loanMoney (Double balance)
+    {   
+        Scanner loanMoneyInput = new Scanner(System.in);
+        Double loanAmount, months;
+        Double monthlyInterest = 0.05;
+
+        System.out.println(" ");
+        System.out.print("Enter Amount to Loan : ");
+        loanAmount = loanMoneyInput.nextDouble();
+
+        System.out.println(" ");
+        System.out.print("Enter How Many Months To Pay The Loan : ");
+        months = loanMoneyInput.nextDouble();
+
+        Double totalRepayment = loanAmount * Math.pow(1 + monthlyInterest, months);
+
+        if (months < 0)
+        {
+            System.out.println(" ");
+            System.out.print("Invalid Months To Pay The Loan");
+            return balance;
+        }
+
+        else
+        {
+            System.out.println(" ");
+
+            System.out.println("You need to pay PHP " + totalRepayment);
+            System.out.println("You need to pay your loan in months : " + months);
+
+            Double monthlyPayment = totalRepayment / months;
+            System.out.println("Monthly Payment: PHP " + monthlyPayment);
+
+            balance += loanAmount;
+            System.out.println(" ");
+            System.out.println("Your new balance is PHP " + balance);
+        }
+        return balance;
+    }
+    private static Double payLoanMoney (Double balance)
+    {
+        Scanner payInput = new Scanner(System.in);
+
+        double remainingLoan = totalRepayment;
+
+        System.out.print("Enter amount to pay for the loan: PHP ");
+        double payAmount = payInput.nextDouble();
+
+        if (payAmount > 0 && payAmount <= balance) {
+            remainingLoan -= payAmount;
+            balance -= payAmount;
+            System.out.println("Payment successful! Remaining loan: PHP " + remainingLoan);
+            System.out.println("Your new balance is PHP " + balance);
+        } else {
+            System.out.println("Invalid payment amount.");
+        }
+        return balance;
+    }
+
+    private static double showTransactions (Double balance)
+    {
+        return balance;
+    }
+
+    private static double changePin (String username, String password)
+    {
+        return 0;
     }
 }
