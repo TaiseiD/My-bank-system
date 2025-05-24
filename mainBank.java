@@ -1,6 +1,11 @@
+import java.util.ArrayList;
 import java.util.Scanner;
+
 public class mainBank 
 {
+    // Add this line at the top of your class
+    static ArrayList<String> transactions = new ArrayList<>();
+
     public static void main(String[] args) 
     {
         Scanner input = new Scanner(System.in);
@@ -8,67 +13,92 @@ public class mainBank
         int choice;
         Double balance = 100000.00;
         
-        String username = "admin";
-        String password = "admin";
+        User user = new User("admin", "admin");
         boolean loggedIn = false;
 
-        while (!loggedIn) {
-            System.out.println("WELCOME TO BANKNET ");
-            input.nextLine();
-            System.out.print("Enter username: ");
-            String inputUser = input.next();
-            System.out.print("Enter password: ");
-            String inputPass = input.next();
-
-            if (!username.equals(inputUser) || !password.equals(inputPass)) {
-            System.out.println("Invalid credentials. Try again.\n");
-            } else {
-            System.out.println("");
-            System.out.println("Login successful!\n");
-            loggedIn = true;
-            }
-        }
-            while (true)
+        while (true)
+        {
+            if (!loggedIn)
             {
-                System.out.println("1. Check Balance");
-                System.out.println("2. Deposit Money");
-                System.out.println("3. Withdraw Money");
+                System.out.println("WELCOME TO BANKNET! ");
+                input.nextLine();
+                System.out.print("Enter username: ");
+                String inputUser = input.next();
+                System.out.print("Enter password: ");
+                String inputPass = input.next();
+
+                if (!user.username.equals(inputUser) || !user.password.equals(inputPass)) 
+                    {
+                        System.out.println("Invalid credentials. Try again.\n");
+                        loggedIn = false;
+                    }
+                    else 
+                    {
+                        System.out.println("");
+                        System.out.println("Login successful!\n");
+                        loggedIn = true;
+                    }
+            }
+
+            else
+            {
+                System.out.println("Please select an option:");
+                System.out.println("1. Show Balance");
+                System.out.println("2. Deposit");
+                System.out.println("3. Withdraw");
                 System.out.println("4. Loan Money");
                 System.out.println("5. Show Transactions");
                 System.out.println("6. Change Pin");
-                System.out.println("7. Exit");
-                System.out.print("Please select an option: ");
+                System.out.println("7. Log Out");
+                System.out.println("8. Exit");
+                System.out.print("Enter your choice: ");
                 choice = input.nextInt();
 
                 switch (choice) 
-                {
-                    case 1:
-                        showBalance(balance);
-                        continue;
-                    case 2:
-                        deposit(balance);
-                        continue;
-                    case 3:
-                        withdraw(balance);
-                        continue;
-                    case 4:
-                        loanMoney(balance);
-                        continue;
-                    case 5:
-                        showTransactions(balance);
-                        continue;
-                    case 6:
-                        changePin(username,password);
-                        continue;
-                    case 7 : 
-                        System.out.println("Thank you for using Banknet. Goodbye!");
-                        System.exit(choice);
-                    default:
-                        System.out.println("Invalid choice. Exiting...");
-                        System.exit(choice);
-                }
-                input.close();
+                    {
+                        case 1:
+                            showBalance(balance);
+                            continue;
+                        case 2:
+                            balance = deposit(balance);
+                            continue;
+                        case 3:
+                            balance = withdraw(balance);
+                            continue;
+                        case 4:
+                            balance = loanMoney(balance);
+                            continue;
+                        case 5:
+                            showTransactions();
+                            continue;
+                        case 6:
+                            changePin(user);
+                            continue;
+                        case 7:
+                            System.out.println("Logging Out...");
+                            loggedIn = false;
+                            continue;
+                        case 8 : 
+                            System.out.println("Thank you for using Banknet. Goodbye!");
+                            System.exit(0);
+                        default:
+                            System.out.println("Invalid choice. Exiting...");
+                            continue;
+                    }
             }
+        }
+    }
+
+    static class User 
+    {
+        String username;
+        String password;
+
+        User(String username, String password) 
+        {
+            this.username = username;
+            this.password = password;
+        }
     }
 
     private static void showBalance(Double balance) 
@@ -83,7 +113,7 @@ public class mainBank
         Scanner depositInput = new Scanner(System.in);
         double depositAmount;
 
-         while(true)
+        while(true)
         {
             System.out.println("");
             System.out.print("Enter amount to deposit: PHP ");
@@ -92,6 +122,7 @@ public class mainBank
             if (depositAmount >= 0)
             {
                 balance += depositAmount;
+                transactions.add("Deposited : PHP " + depositAmount);
                 System.out.println("");
                 System.out.println("Deposit successful! Your new balance is PHP " + balance);
                 System.out.println("");
@@ -114,7 +145,6 @@ public class mainBank
 
         while (true)
         {
-
             System.out.print("Please Enter Amount To Withdraw : ");
             withdrawAmount = withdrawInput.nextDouble();
 
@@ -126,21 +156,10 @@ public class mainBank
             {
                 System.out.println("Withdrawal Sucessful");
                 balance -= withdrawAmount;
+                transactions.add("Withdrew : PHP " + withdrawAmount);
                 System.out.println("Your new balance is " + balance);
             }
             return balance;
-        }
-    }
-
-    public class loanResult
-    {
-        public double balance;
-        public double totalRepayment;
-
-        public loanResult(double balance, double totalRepayment)
-        {
-            this.balance=balance;
-            this.totalRepayment=totalRepayment;
         }
     }
 
@@ -167,11 +186,9 @@ public class mainBank
             System.out.print("Invalid Months To Pay The Loan");
             return balance;
         }
-
         else
         {
             System.out.println(" ");
-
             System.out.println("You need to pay PHP " + totalRepayment);
             System.out.println("You need to pay your loan in months : " + months);
 
@@ -179,6 +196,7 @@ public class mainBank
             System.out.println("Monthly Payment: PHP " + monthlyPayment);
 
             balance += loanAmount;
+            transactions.add("Loaned : PHP " + loanAmount + " (to repay : PHP " + totalRepayment + ")");
             System.out.println(" ");
             System.out.println("Your new balance is PHP " + balance);
         }
@@ -192,7 +210,7 @@ public class mainBank
 
             switch (choice) 
             {
-                case 0:
+                case 1:
                     System.out.print("Enter amount to pay for the loan: PHP ");
                     double payAmount = loanMoneyInput.nextDouble();
 
@@ -200,15 +218,15 @@ public class mainBank
                     {
                         remainingLoan -= payAmount;
                         balance -= payAmount;
+                        transactions.add("Paid : PHP " + payAmount + " towards loan");
                         System.out.println("Payment successful! Remaining loan: PHP " + remainingLoan);
                         System.out.println("Your new balance is PHP " + balance);
-                    } 
-                    
-                    else 
+                    }                     else 
                     {
                         System.out.println("Invalid payment amount.");
                     }
-                case 1:
+                    break;
+                case 0:
                     return balance;
                 default:
                     break;
@@ -217,13 +235,52 @@ public class mainBank
         }
     }
 
-    private static double showTransactions (Double balance)
+    private static void showTransactions ()
     {
-        return balance;
+        System.out.println("");
+        if (transactions.isEmpty()) 
+        {
+            System.out.println("No transactions to show at this time.");
+        } 
+        else 
+        {
+            System.out.println("Transaction History:");
+            for (String t : transactions) 
+            {
+                System.out.println(t);
+            }
+        }
+        System.out.println("");
     }
 
-    private static double changePin (String username, String password)
+    private static void changePin(User user) 
     {
-        return 0;
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter current username: ");
+        String currentUser = input.next();
+        System.out.print("Enter current password: ");
+        String currentPass = input.next();
+
+        if (!user.username.equals(currentUser) || !user.password.equals(currentPass)) 
+        {
+            System.out.println("Incorrect username or password. Pin change failed.");
+            return;
+        }
+
+        System.out.print("Enter new password: ");
+        String newPassword = input.next();
+        System.out.print("Confirm new password: ");
+        String confirmPassword = input.next();
+
+        if (!newPassword.equals(confirmPassword)) 
+        {
+            System.out.println("Passwords do not match. Pin change failed.");
+        } 
+        else 
+        {
+            user.password = newPassword;
+            System.out.println("Pin changed successfully!");
+        }
     }
+
 }
