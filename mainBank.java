@@ -163,76 +163,69 @@ public class mainBank
         }
     }
 
-    private static Double loanMoney (Double balance)
-    {   
+    private static Double loanMoney(Double balance)
+    {
         Scanner loanMoneyInput = new Scanner(System.in);
-        Double loanAmount, months;
-        Double monthlyInterest = 0.05;
         int choice;
 
         System.out.println(" ");
-        System.out.print("Enter Amount to Loan : ");
-        loanAmount = loanMoneyInput.nextDouble();
+        System.out.println("1. Loan Money");
+        System.out.println("2. Pay Loan");
+        System.out.print("Enter your choice: ");
+        choice = loanMoneyInput.nextInt();
 
-        System.out.println(" ");
-        System.out.print("Enter How Many Months To Pay The Loan : ");
-        months = loanMoneyInput.nextDouble();
+        if (choice == 1) {
+            Double loanAmount, months;
+            Double monthlyInterest = 0.05;
 
-        Double totalRepayment = loanAmount * Math.pow(1 + monthlyInterest, months);
-
-        if (months < 0)
-        {
             System.out.println(" ");
-            System.out.print("Invalid Months To Pay The Loan");
-            return balance;
-        }
-        else
-        {
+            System.out.print("Enter Amount to Loan : ");
+            loanAmount = loanMoneyInput.nextDouble();
+
             System.out.println(" ");
-            System.out.println("You need to pay PHP " + totalRepayment);
-            System.out.println("You need to pay your loan in months : " + months);
+            System.out.print("Enter How Many Months To Pay The Loan : ");
+            months = loanMoneyInput.nextDouble();
 
-            Double monthlyPayment = totalRepayment / months;
-            System.out.println("Monthly Payment: PHP " + monthlyPayment);
+            if (months <= 0) {
+                System.out.println(" ");
+                System.out.println("Invalid Months To Pay The Loan");
+                return balance;
+            } else {
+                Double totalRepayment = loanAmount * Math.pow(1 + monthlyInterest, months);
+                System.out.println(" ");
+                System.out.println("You need to pay PHP " + totalRepayment);
+                System.out.println("You need to pay your loan in months : " + months);
 
-            balance += loanAmount;
-            transactions.add("Loaned : PHP " + loanAmount + " (to repay : PHP " + totalRepayment + ")");
-            System.out.println(" ");
-            System.out.println("Your new balance is PHP " + balance);
-        }
+                Double monthlyPayment = totalRepayment / months;
+                System.out.println("Monthly Payment: PHP " + monthlyPayment);
 
-        while (true)
-        {
-            double remainingLoan = totalRepayment;
-
-            System.out.print(" Press 0 to continue and 1 to pay your loan : ");
-            choice = loanMoneyInput.nextInt();
-
-            switch (choice) 
-            {
-                case 1:
-                    System.out.print("Enter amount to pay for the loan: PHP ");
-                    double payAmount = loanMoneyInput.nextDouble();
-
-                    if (payAmount > 0 && payAmount <= balance) 
-                    {
-                        remainingLoan -= payAmount;
-                        balance -= payAmount;
-                        transactions.add("Paid : PHP " + payAmount + " towards loan");
-                        System.out.println("Payment successful! Remaining loan: PHP " + remainingLoan);
-                        System.out.println("Your new balance is PHP " + balance);
-                    }                     else 
-                    {
-                        System.out.println("Invalid payment amount.");
-                    }
-                    break;
-                case 0:
-                    return balance;
-                default:
-                    break;
+                balance += loanAmount;
+                transactions.add("Loaned : PHP " + loanAmount + " (to repay : PHP " + totalRepayment + ")");
+                System.out.println(" ");
+                System.out.println("Your new balance is PHP " + balance);
             }
-            return balance;
+        } else if (choice == 2) {
+            // For simplicity, let's assume only one outstanding loan at a time
+            System.out.print("Enter total outstanding loan to pay: PHP ");
+            double remainingLoan = loanMoneyInput.nextDouble();
+
+            System.out.print("Enter amount to pay for the loan: PHP ");
+            double payAmount = loanMoneyInput.nextDouble();
+
+            if (payAmount > 0 && payAmount <= balance && payAmount <= remainingLoan) {
+                remainingLoan -= payAmount;
+                balance -= payAmount;
+                transactions.add("Paid : PHP " + payAmount + " towards loan");
+                System.out.println("Payment successful! Remaining loan: PHP " + remainingLoan);
+                System.out.println("Your new balance is PHP " + balance);
+            } else {
+                System.out.println("Invalid payment amount.");
+            }
+        } else {
+            System.out.println("Invalid choice.");
         }
+
+        return balance;
     }
 
     private static void showTransactions ()
