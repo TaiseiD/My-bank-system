@@ -3,7 +3,6 @@ import java.util.Scanner;
 
 public class mainBank 
 {
-    // Add this line at the top of your class
     static ArrayList<String> transactions = new ArrayList<>();
 
     public static void main(String[] args) 
@@ -174,7 +173,8 @@ public class mainBank
         System.out.print("Enter your choice: ");
         choice = loanMoneyInput.nextInt();
 
-        if (choice == 1) {
+        if (choice == 1) 
+        {
             Double loanAmount, months;
             Double monthlyInterest = 0.05;
 
@@ -186,11 +186,14 @@ public class mainBank
             System.out.print("Enter How Many Months To Pay The Loan : ");
             months = loanMoneyInput.nextDouble();
 
-            if (months <= 0) {
+            if (months <= 0) 
+            {
                 System.out.println(" ");
                 System.out.println("Invalid Months To Pay The Loan");
                 return balance;
-            } else {
+            } 
+            else 
+            {
                 Double totalRepayment = loanAmount * Math.pow(1 + monthlyInterest, months);
                 System.out.println(" ");
                 System.out.println("You need to pay PHP " + totalRepayment);
@@ -204,8 +207,10 @@ public class mainBank
                 System.out.println(" ");
                 System.out.println("Your new balance is PHP " + balance);
             }
-        } else if (choice == 2) {
-            // For simplicity, let's assume only one outstanding loan at a time
+        } 
+        
+        else if (choice == 2) 
+        {
             System.out.print("Enter total outstanding loan to pay: PHP ");
             double remainingLoan = loanMoneyInput.nextDouble();
 
@@ -221,7 +226,9 @@ public class mainBank
             } else {
                 System.out.println("Invalid payment amount.");
             }
-        } else {
+        } 
+        else 
+        {
             System.out.println("Invalid choice.");
         }
 
