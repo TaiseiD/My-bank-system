@@ -5,6 +5,7 @@ public class mainBank
 {
     static ArrayList<String> transactions = new ArrayList<>();
 
+    @SuppressWarnings("unlikely-arg-type")
     public static void main(String[] args) 
     {
         Scanner input = new Scanner(System.in);
@@ -13,6 +14,8 @@ public class mainBank
         Double balance = 100000.00;
         
         User user = new User("admin", "admin");
+        admin admin = new admin("admin123");
+
         boolean loggedIn = false;
 
         while (true)
@@ -49,7 +52,6 @@ public class mainBank
                 System.out.println("5. Show Transactions");
                 System.out.println("6. Change Pin");
                 System.out.println("7. Log Out");
-                System.out.println("8. Exit");
                 System.out.print("Enter your choice: ");
                 choice = input.nextInt();
 
@@ -77,9 +79,20 @@ public class mainBank
                             System.out.println("Logging Out...");
                             loggedIn = false;
                             continue;
-                        case 8 : 
-                            System.out.println("Thank you for using Banknet. Goodbye!");
-                            System.exit(0);
+                        case 0 : 
+                            input.nextLine();
+                            System.out.print("Enter the admin password : ");
+                            String adminPasswordInput = input.nextLine();
+                            if (admin.adminPassword.equals(adminPasswordInput))
+                            {
+                                System.out.println("Thank you for using Banknet. Goodbye!");
+                                System.exit(0);
+                            }
+                            else
+                            {
+                                loggedIn = false;
+                                continue;
+                            }
                         default:
                             System.out.println("Invalid choice. Exiting...");
                             continue;
@@ -97,6 +110,16 @@ public class mainBank
         {
             this.username = username;
             this.password = password;
+        }
+    }
+
+    static class admin
+    {
+        String adminPassword;
+
+        admin (String adminPassword)
+        {
+            this.adminPassword = adminPassword;
         }
     }
 
