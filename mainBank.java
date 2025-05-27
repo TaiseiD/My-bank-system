@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class mainBank 
 {
     static ArrayList<String> transactions = new ArrayList<>();
-    static ArrayList<User> users = new ArrayList<>(); // Store registered users
+    static ArrayList<User> users = new ArrayList<>();
 
     public static void main(String[] args) 
     {
