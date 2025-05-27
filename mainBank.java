@@ -4,19 +4,21 @@ import java.util.Scanner;
 public class mainBank 
 {
     static ArrayList<String> transactions = new ArrayList<>();
+    static ArrayList<User> users = new ArrayList<>(); // Store registered users
 
-    @SuppressWarnings("unlikely-arg-type")
     public static void main(String[] args) 
     {
         Scanner input = new Scanner(System.in);
 
         int choice;
         Double balance = 100000.00;
-        
-        User user = new User("admin", "admin");
+
+        User adminUser = new User("admin", "admin");
+        users.add(adminUser);
         admin admin = new admin("admin123");
 
         boolean loggedIn = false;
+        User currentUser = null;
 
         while (true)
         {
@@ -24,22 +26,69 @@ public class mainBank
             {
                 System.out.println("WELCOME TO BANKNET! ");
                 input.nextLine();
-                System.out.print("Enter username: ");
-                String inputUser = input.next();
-                System.out.print("Enter password: ");
-                String inputPass = input.next();
 
-                if (!user.username.equals(inputUser) || !user.password.equals(inputPass)) 
+                System.out.println("1. Create an Account ");
+                System.out.println("2. Login existing Account ");
+                System.out.print("Enter Here : ");
+                int startingChoices = input.nextInt();
+
+                if (startingChoices == 1)
+                {
+                    System.out.println("ACCOUNT CREATION ");
+                    System.out.print("Username : ");
+                    String reguserName = input.next();
+                    System.out.print("Password : ");
+                    String regpassword = input.next();
+
+                    boolean exists = false;
+                    for (User u : users) 
+                    {
+                        if (u.username.equals(reguserName)) 
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+
+                    if (exists) 
+                    {
+                        System.out.println("Username already exists. Try another.");
+                    } 
+                    else 
+                    {
+                        User newUser = new User(reguserName, regpassword);
+                        users.add(newUser);
+                        System.out.println("Account created successfully! Please login.");
+                    }
+                }
+                else 
+                {
+                    System.out.print("Enter username: ");
+                    String inputUser = input.next();
+                    System.out.print("Enter password: ");
+                    String inputPass = input.next();
+
+                    boolean found = false;
+                    for (User u : users) {
+                        if (u.username.equals(inputUser) && u.password.equals(inputPass)) {
+                            found = true;
+                            currentUser = u;
+                            break;
+                        }
+                    }
+
+                    if (!found) 
                     {
                         System.out.println("Invalid credentials. Try again.\n");
                         loggedIn = false;
-                    }
+                    } 
                     else 
                     {
                         System.out.println("");
                         System.out.println("Login successful!\n");
                         loggedIn = true;
                     }
+                }
             }
 
             else
@@ -73,11 +122,12 @@ public class mainBank
                             showTransactions();
                             continue;
                         case 6:
-                            changePin(user);
+                            changePin(currentUser);
                             continue;
                         case 7:
                             System.out.println("Logging Out...");
                             loggedIn = false;
+                            currentUser = null;
                             continue;
                         case 0 : 
                             input.nextLine();
