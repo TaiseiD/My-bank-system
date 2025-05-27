@@ -255,6 +255,13 @@ public class mainBank
             System.out.print("Enter Amount to Loan : ");
             loanAmount = loanMoneyInput.nextDouble();
 
+            if (loanAmount > 10000) 
+            {
+                System.out.println(" ");
+                System.out.println("Loan amount exceeds the 10,000 PHP limit.");
+                return balance;
+            }
+
             System.out.println(" ");
             System.out.print("Enter How Many Months To Pay The Loan : ");
             months = loanMoneyInput.nextDouble();
