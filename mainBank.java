@@ -13,8 +13,8 @@ public class mainBank
         int choice;
         Double balance = 100000.00;
 
-        User adminUser = new User("admin", "admin");
-        users.add(adminUser);
+        User bankUser = new User("user", "passkey");
+        users.add(bankUser);
         admin admin = new admin("admin123");
 
         boolean loggedIn = false;
